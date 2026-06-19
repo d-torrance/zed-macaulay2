@@ -1,0 +1,5 @@
+name = "Macaulay2"
+grammar = "macaulay2"
+path_suffixes = ["m2"]
+line_comments = ["-- "]
+block_comment = ["-*", "*-"]
