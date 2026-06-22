@@ -1,5 +1,5 @@
-use zed_extension_api::{self as zed, LanguageServerId, Result};
 use zed_extension_api::settings::LspSettings;
+use zed_extension_api::{self as zed, LanguageServerId, Result};
 
 struct Macaulay2Extension;
 
