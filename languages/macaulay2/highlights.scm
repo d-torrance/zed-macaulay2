@@ -17,7 +17,8 @@
 
 (symbol) @variable
 
-(_ symbol: (resolved_symbol) @variable)
+; A name quoted after a cobinding keyword reads as a variable, whatever its lexical kind
+(_ symbol: _ @variable)
 
 ; Operators
 (binary_expression
@@ -54,6 +55,8 @@
   "else"
   "then"
   "when"
+  "list"
+  "do"
 ] @keyword.conditional
 
 [
@@ -108,8 +111,7 @@
 [
   "new"
   "of"
-  "list"
-  "do"
+
 ] @keyword
 
 ((binary_expression
@@ -125,6 +127,8 @@
 (lambda_expression
   parameters: [
     (symbol) @variable.parameter
+    (parenthesized_expression
+      (symbol) @variable.parameter)
     (sequence
       (symbol) @variable.parameter)
     (list
@@ -168,9 +172,9 @@
 ; Method installations
 ((binary_expression
   left: (binary_expression
-    left: (_) @type
+    left: (symbol) @type
     operator: _ @function
-    right: (_) @type)
+    right: (symbol) @type)
   operator: [
     "="
     ":="
@@ -202,13 +206,18 @@
   left: (binary_expression
     left: (symbol) @function
     operator: "SPACE"
-    right: (sequence
-      "(" @type
-      [
+    right: [
+      (sequence
+        "(" @type
+        [
+          (symbol) @type
+          "," @type
+        ]*
+        ")" @type)
+      (parenthesized_expression
+        "(" @type
         (symbol) @type
-        "," @type
-      ]*
-      ")" @type))
+        ")" @type)])
   operator: [
     "="
     ":="
@@ -259,6 +268,8 @@
       "from" @keyword
       [
         (symbol) @type
+        (parenthesized_expression
+          (symbol) @type)
         (sequence
           (symbol) @type)
       ])?)
@@ -272,13 +283,13 @@
   (#match? @variable.builtin "^((o[1-9][0-9]*)|oo|ooo|oooo)$"))
 
 ((symbol) @constant.builtin
-  (#any-of? @constant.builtin "CatalanConstant" "EulerConstant" "ii" "pi" "null"))
+  (#any-of? @constant.builtin "CatalanConstant" "EulerConstant" "ii" "pi" "null" "infinity"))
 
 ((symbol) @boolean
   (#any-of? @boolean "true" "false"))
 
 ((symbol) @error
-  (#match? @error "^error$"))
+  (#any-of? @error "error" "stderr"))
 
 ((symbol) @variable.builtin
   (#any-of? @variable.builtin
@@ -299,6 +310,9 @@
   operator: "SPACE"
   right: [
     (string_literal) @string.special.url
+    (parenthesized_expression
+      .
+      (string_literal) @string.special.url)
     (sequence
       .
       (string_literal) @string.special.url)
@@ -310,6 +324,9 @@
   operator: "SPACE"
   right: [
     (string_literal) @string.regexp
+    (parenthesized_expression
+      .
+      (string_literal) @string.regexp)
     (sequence
       .
       (string_literal) @string.regexp)
@@ -339,20 +356,34 @@
   operator: "SPACE"
   right: [
     (symbol) @namespace
+    (parenthesized_expression
+      .
+      (symbol) @namespace)
     (sequence
       .
       (symbol) @namespace)
     (string_literal) @string.special
+    (parenthesized_expression
+      .
+      (string_literal) @string.special)
     (sequence
       .
       (string_literal) @string.special)
   ])
   (#any-of? @function.builtin
     "loadPackage" "installPackage" "uninstallPackage" "needsPackage" "endPackage"
-    "newPackage" "importFrom" "exportFrom"))
+    "newPackage" ))
 
 ((binary_expression
   left: (symbol) @function.builtin
   operator: "_"
   right: (symbol) @namespace)
   (#any-of? @function.builtin "importFrom" "exportFrom"))
+
+((binary_expression
+  left: (symbol) @function.builtin
+  operator: "SPACE"
+  right: [(sequence
+              (string_literal) @string.special.path)
+          (string_literal) @string.special.path]
+  ) (#eq? @function.builtin "load"))

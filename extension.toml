@@ -8,7 +8,7 @@ repository = "https://github.com/d-torrance/zed-macaulay2"
 
 [grammars.macaulay2]
 repository = "https://github.com/AlexanderGolys/tree-sitter-macaulay2"
-rev = "0ff4cc24387327a40ddec7321792bd81d9bc3565"
+rev = "95aafb0d1fa66aa5f422ca16af56dd471a15b927"
 
 [language_servers.m2-language-server]
 name = "Macaulay2 Language Server"

@@ -1,5 +1,6 @@
 [
   (sequence)
+  (parenthesized_expression)
   (list)
   (array)
   (angle_bar_list)
@@ -12,6 +13,7 @@
 ] @indent
 
 (sequence ")" @end)
+(parenthesized_expression ")" @end)
 (list "}" @end)
 (array "]" @end)
 (angle_bar_list "|>" @end)
