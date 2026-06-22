@@ -1,6 +1,6 @@
 id = "macaulay2"
 name = "Macaulay2"
-version = "0.1.0"
+version = "0.1.1"
 schema_version = 1
 authors = ["Doug Torrance <dtorrance9@gatech.edu>"]
 description = "Macaulay2 language support for Zed"
