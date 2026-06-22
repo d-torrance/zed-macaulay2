@@ -56,6 +56,15 @@ If you have multiple kernels installed, you can pin the selection in `settings.j
 }
 ```
 
+Currently, Zed does not render LaTeX in the REPL output, so for best results, use `standard` mode, e.g.:
+
+```m2
+%mode standard
+R = QQ[x,y,z,w]
+I = monomialCurveIdeal(R, {1,2,3})
+C = res I
+```
+
 ## License
 
 MIT License
